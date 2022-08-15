@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/css/studentSearch.css">
+    </head>
+    <body>
+        <div class="container mt-3">
+            <div class="container-fluid text-center bg-dark py-1 header">
+                <p class="text-warning heading p-0 m-0">IIITA CMS</p>
+            </div>
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/">HOME</a>
+                        </li>
+                        <% if(!locals.user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/student/login">LOGIN</a>
+                            </li>
+                        <% } %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/courses">MY COURSES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/courseSelection">COURSE SELECTION</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/student/search">SEARCH</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/timeTable">TIME TABLE</a>
+                        </li> 
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/settings">SETTINGS</a>
+                        </li>
+                        <% if(locals.user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/student/destroy-session">LOGOUT</a>
+                            </li>   
+                        <% } %>      
+                    </ul>
+                </div>  
+            </nav>
+            <div class="container-fluid box">
+                <div class="announcement-header">
+                   SEARCH:
+                </div>
+                <div class="announcement-box">
+                    <% if(!locals.user) { %>
+                        <p style="margin-left:20px;margin-top:10px;">You are currently logged out. Please <a href="/student/login">login</a>. </p>
+                    <% } else { %>
+                        <div class="container" style="margin-top:10px;">
+                            <form action="/student/searchResults" method="post">
+                              <div class="form-group">
+                                  <label for="pswd1" style="font-weight:750;">Search for Courses or Faculties:</label>
+                                  <input type="text" class="form-control" id="pswd1" placeholder="Enter name of Course or Faculty" name="input">
+                               </div>
+                              <button type="submit" class="btn btn-success">Search</button>
+                            </form>
+                        </div>
+                        <br><br>
+                        <% if(searchResults.length) { %>
+                            <% if(course) { %>
+                            <% for(course of searchResults) { %>
+                                <div class = "container">
+                                    <table class="table table-striped table-responsive-sm">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th>Course name</th>
+                                                <th>Course credits</th>
+                                                <th>Instructor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white">
+                                                <td><%=course.name%></td>
+                                                <td><%=course.credits%></td>
+                                                <td><%=course.instructor%></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a href="/student/courses/viewDetails/?courseId=<%=course.id%>&&semester=<%=course.semester%>">
+                                        <button type="button" class="btn btn-success">View Details</button>
+                                    </a>
+                                    <a href="/student/courses/enroll/?courseId=<%=course.id%>&&semester=<%=course.semester%>">
+                                        <button type="button" class="btn btn-success">Enroll</button>
+                                    </a>
+                                    <br><br>
+                                </div>
+                                <% } %>
+                                <% } else { %>
+                                    <% for (faculty of searchResults)  { %>
+                                        <div class = "container">
+                                            <table class="table table-striped table-responsive-sm">
+                                                <thead class="thead-dark">
+                                                    <tr>
+                                                        <th>Faculty name</th>
+                                                        <th>Email</th>
+                                                        <th>Department</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr class="bg-white">
+                                                        <td><%=faculty.firstname%> <%=faculty.lastname%></td>
+                                                        <td><%=faculty.email%></td>
+                                                        <td><%=faculty.department%></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <br><br>
+                                        </div>
+                                    <% } %>
+                                <% } %>
+                        <% } else { %>
+                            <p style="margin-left:10px;font-weight:750;">Currently, there are not any search results. </p>
+                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+    </body>
+</html>

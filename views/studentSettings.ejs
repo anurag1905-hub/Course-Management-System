@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/css/studentSettings.css">
+    </head>
+    <body>
+        <div class="container mt-3">
+            <div class="container-fluid text-center bg-dark py-1 header">
+                <p class="text-warning heading p-0 m-0">IIITA CMS</p>
+            </div>
+            <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/">HOME</a>
+                        </li>
+                        <% if(!locals.user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/student/login">LOGIN</a>
+                            </li>
+                        <% } %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/courses">MY COURSES</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/courseSelection">COURSE SELECTION</a>
+                        </li> 
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/search">SEARCH</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/student/timeTable">TIME TABLE</a>
+                        </li> 
+
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/student/settings">SETTINGS</a>
+                        </li>
+                        <% if(locals.user) { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/student/destroy-session">LOGOUT</a>
+                            </li>   
+                        <% } %>      
+                    </ul>
+                </div>  
+            </nav>
+            <div class="container-fluid box">
+                <div class="announcement-header">
+                   CHANGE PASSWORD:
+                </div>
+                <div class="announcement-box">
+                    <% if(!locals.user) { %>
+                        <p style="margin-left:20px;margin-top:10px;">You are currently logged out. Please <a href="/student/login">login</a>. </p>
+                    <% } else { %>
+                        <div class="container" style="margin-top:10px;">
+                            <form action="/student/changePassword" method="post">
+                              <div class="form-group">
+                                  <label for="pswd1" style="margin-top:10px;font-weight:750;">Current Password:</label>
+                                  <input type="password" class="form-control" id="pswd1" placeholder="Enter Current Password" name="currentPassword" required>
+                                  <label for="pswd2" style="margin-top:10px;font-weight:750;">New Password:</label>
+                                  <input type="password" class="form-control" id="pswd2" placeholder="Enter New Password" name="newPassword" required>
+                                  <label for="pswd3" style="margin-top:10px;font-weight:750;">Confirm Password:</label>
+                                  <input type="password" class="form-control" id="pswd3" placeholder="Confirm New Password" name="confirmPassword" required>
+                               </div>
+                              <div class="form-group">
+                             </div>
+                              <button type="submit" class="btn btn-success">Change Password</button>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+        <script>
+           <% if(flash.success&&flash.success.length>0) { %>
+                new Noty({
+                   theme:'relax',
+                   text:"<%=flash.success%>",
+                   type:'success',
+                   layout:'topRight',
+                   timeout:1500
+                }).show();
+            <% } %>
+        </script>
+    </body>
+</html>
